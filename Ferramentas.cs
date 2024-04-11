@@ -1,46 +1,66 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BibliotecaDate
+namespace BibliotecaData
 {
     public static class Ferramentas
     {
-        public static DateTime SomarDias(string data, int dias)
+        public static DateTime SeparaData1(string primeiraData)
         {
-            string dia = data.Substring(0, 2);
-            string mes = data.Substring(3, 2);
-            string ano = data.Substring(6);
-            string dataEUA = $"{ano}/{mes}/{dia}";
-
-            DateTime dataC = Convert.ToDateTime(dataEUA);
-            DateTime resultado = dataC.AddDays(dias);
-            return resultado;
+            string dia = primeiraData.Substring(0, 2);
+            string mes = primeiraData.Substring(3, 2);
+            string ano = primeiraData.Substring(6);
+            string hora = primeiraData.Substring(11,2);
+            string minuto = primeiraData.Substring(14,2);
+            string segundo = primeiraData.Substring(17,2);
+            string dataEUA = $"{ano}/{mes}/{dia} {hora}:{minuto}:{segundo}";
+            DateTime dataB = Convert.ToDateTime(dataEUA);
+            return dataB;
         }
-        public static TimeSpan DiferencaDias(string primeiraData, string segundaData)
+        public static DateTime SeparaData2(string segundaData)
         {
-            string dia1 = primeiraData.Substring(0, 2);
-            string mes1 = primeiraData.Substring(3, 2);
-            string ano1 = primeiraData.Substring(6);
-            string dataEUA1 = $"{ano1}/{mes1}/{dia1}";
-            DateTime dataB = Convert.ToDateTime(dataEUA1);
+            string dia = segundaData.Substring(0, 2);
+            string mes = segundaData.Substring(3, 2);
+            string ano = segundaData.Substring(6);
+            string hora = segundaData.Substring(11, 2);
+            string minuto = segundaData.Substring(14, 2);
+            string segundo = segundaData.Substring(17, 2);
+            string dataEUA = $"{ano}/{mes}/{dia} {hora}:{minuto}:{segundo}";
+            DateTime dataC = Convert.ToDateTime(dataEUA);
+            return dataC;
+        }
 
-            string dia2 = segundaData.Substring(0, 2);
-            string mes2 = segundaData.Substring(3, 2);
-            string ano2 = segundaData.Substring(6);
-            string dataEUA2 = $"{ano2}/{mes2}/{dia2}";
-            DateTime dataC = Convert.ToDateTime(dataEUA2);
-
-            TimeSpan diferenca = dataC.Subtract(dataB);
-            return diferenca;
+        public static DateTime SomarDias(string primeiraData, int dias)
+        {           
+            DateTime resultado = SeparaData1(primeiraData).AddDays(dias);
+            
+            return resultado;
         }       
+        public static TimeSpan DiferencaDias(string primeiraData, string segundaData)
+        {          
+            TimeSpan diferenca = SeparaData1(primeiraData).Subtract(SeparaData2(segundaData));            
+            return diferenca;
+        }        
+        public static int DiferencaMeses(string primeiraData, string segundaData)
+        {
+            int meses = Convert.ToInt32(DiferencaDias(primeiraData,segundaData).TotalDays/30.44);
+            return meses;
+        }
+        public static int DiferencaAnos(string primeiraData, string segundaData)
+        {
+            int anos = Convert.ToInt32(DiferencaDias(primeiraData, segundaData).TotalDays / 365.25);
+            return anos;
+        }
         public static void Menu()
         {
             Console.WriteLine("1-SOMAR DIAS\n2-DIFERENÇA ENTRE DATAS\n");
-            Console.Write("DIGITE A NUMERAÇÃO CORRESPONDENTE A SUA ESCOLHA:(");            
+            Console.Write("DIGITE A NUMERAÇÃO CORRESPONDENTE A SUA ESCOLHA:(");
+            return;
         }
-        
+
     }
 }
+
